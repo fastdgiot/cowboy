@@ -640,6 +640,8 @@ websocket_send_close(State, Reason) ->
 	_ = case Reason of
 		Normal when is_atom(Normal) ->
 			transport_send(State, fin, frame({close, 1000, <<>>}, State));
+        {error, closed} -> %% the socket has already been closed
+            ok;
         {error, close} ->
 			transport_send(State, fin, frame({close, 1000, <<>>}, State));
 		{error, badframe} ->
