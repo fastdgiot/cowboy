@@ -515,7 +515,7 @@ read_body(Req=#{has_body := false}, _) ->
 read_body(Req=#{has_read_body := true}, _) ->
 	{ok, <<>>, Req};
 read_body(Req, Opts) ->
-	Length = maps:get(length, Opts, 8000000),
+	Length = maps:get(length, Opts, 80000000),
 	Period = maps:get(period, Opts, 15000),
 	Timeout = maps:get(timeout, Opts, Period + 1000),
 	Ref = make_ref(),
@@ -640,7 +640,7 @@ read_part_body(Req, Opts) ->
 	end.
 
 read_part_body(Buffer, Opts, Req=#{multipart := {Boundary, _}}, Acc) ->
-	Length = maps:get(length, Opts, 8000000),
+	Length = maps:get(length, Opts, 80000000),
 	case byte_size(Acc) > Length of
 		true ->
 			{more, Acc, Req#{multipart => {Boundary, Buffer}}};
